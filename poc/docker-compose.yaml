@@ -9,6 +9,8 @@ services:
         aliases:
           - victoria-metrics
     restart: unless-stopped
+    ports:
+      - 8428:8428
     volumes:
       - victoria-metrics-storage:/var/victoria-metrics
     extra_hosts:
@@ -40,6 +42,8 @@ services:
         aliases:
           - worker
     restart: unless-stopped
+    ports:
+      - 8000:8000
 
 volumes:
   victoria-metrics-storage: {}
