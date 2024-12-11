@@ -1,0 +1,51 @@
+services:
+
+  victoria-metrics:
+    build:
+      context: ./victoria-metrics
+    container_name: victoria-metrics
+    networks:
+      default:
+        aliases:
+          - victoria-metrics
+    restart: unless-stopped
+    volumes:
+      - victoria-metrics-storage:/var/victoria-metrics
+    extra_hosts:
+      - 'worker:host-gateway'
+
+  grafana:
+    build:
+      context: ./grafana
+    container_name: grafana
+    networks:
+      default:
+        aliases:
+          - grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    extra_hosts:
+      - 'victoria-metrics:host-gateway'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  worker:
+    image: worker:latest
+    build:
+      context: ./worker
+    container_name: worker
+    networks:
+      default:
+        aliases:
+          - worker
+    restart: unless-stopped
+
+volumes:
+  victoria-metrics-storage: {}
+  grafana-storage: {}
+
+networks:
+  default:
+    name: deploy_default
+    driver: bridge

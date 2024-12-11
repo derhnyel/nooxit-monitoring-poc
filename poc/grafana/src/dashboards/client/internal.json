@@ -1,0 +1,348 @@
+{
+  "id": null,
+  "uid": null,
+  "title": "Internal Metrics",
+  "tags": [],
+  "timezone": "browser",
+  "schemaVersion": 27,
+  "version": 0,
+  "refresh": "5s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "gauge",
+      "title": "System Availability",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "((sum(statements_processed_total) - sum(process_errors_total)) / sum(statements_processed_total)) * 100",
+          "format": "time_series"
+        }
+      ],
+      "maxValue": 100,
+      "unit": "percent"
+    },
+    {
+      "id": 2,
+      "type": "gauge",
+      "title": "Validation Worker Success Rate (%)",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "expr": "((sum(rate(validate_success_total[1m])) - sum(rate(validate_failed_total[1m]))) / sum(rate(validate_success_total[1m]))) * 100",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "gauge",
+      "title": "ERP Worker: API Success Response Rate",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "targets": [
+        {
+          "expr": "(sum(rate(erp_http_responses_total{status_code='200'}[1m])) / sum(rate(erp_http_responses_total[1m]))) * 100",
+          "format": "time_series"
+        }
+      ],
+      "yaxes": [
+        {
+          "format": "percent",
+          "min": 0,
+          "max": 100
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "geomap",
+      "title": "Unique Logins/Sessions by Location",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "targets": [
+        {
+          "expr": "unique_logins_total{}",
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        }
+      ],
+      "mapCenterLatitude": 20,
+      "mapCenterLongitude": 0,
+      "initialZoom": 2,
+      "dataLayer": {
+        "location": "auto"
+      }
+    },
+    {
+      "id": 7,
+      "type": "graph",
+      "title": "CPU Usage Over Time",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "targets": [
+        {
+          "expr": "worker_cpu_usage",
+          "format": "time_series",
+          "legendFormat": "{{job}}"
+        }
+      ],
+      "lines": true,
+      "points": false,
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "min": 0,
+          "max": 100,
+          "show": true
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "graph",
+      "title": "Memory Usage Over Time",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "targets": [
+        {
+          "expr": "worker_memory_usage",
+          "format": "time_series",
+          "interval": "1m",
+          "legendFormat": "{{job}}"
+        }
+      ],
+      "lines": true,
+      "points": false,
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "min": 0,
+          "max": 100,
+          "show": true
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "graph",
+      "title": "Network Throughput Over Time",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "targets": [
+        {
+          "expr": "worker_network_throughput",
+          "format": "time_series",
+          "legendFormat": "{{job}}"
+        }
+      ],
+      "lines": true,
+      "points": false,
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "min": 0,
+          "max": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "graph",
+      "title": "Hourly Active Users",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "targets": [
+        {
+          "expr": "sum by (location) (increase(unique_logins_total[1h]))",
+          "format": "time_series",
+          "legendFormat": "{{location}}"
+        }
+      ],
+      "lines": true,
+      "points": false,
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "min": 0,
+          "max": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Total Transactions Processed",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "targets": [
+        {
+          "expr": "sum(statements_processed_total)",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Total Positions Open Per Month",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(open_positions[1h]))",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Total Positions Closed Per Month",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 36
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(closed_positions_total[1h]))",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "graph",
+      "title": "Model Correctness Over Time (%)",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 36
+      },
+      "targets": [
+        {
+          "expr": "avg(model_correctness_ratio) * 100",
+          "format": "time_series",
+          "legendFormat": "{{customer}}"
+        }
+      ],
+      "lines": true,
+      "points": false,
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percent",
+          "min": 0,
+          "max": 100,
+          "show": true
+        },
+        {
+          "format": "short",
+          "min": null,
+          "max": null,
+          "show": true
+        }
+      ]
+    }
+  ]
+}
